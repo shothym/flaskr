@@ -1,6 +1,14 @@
 import sqlite3
 from contextlib import closing
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from flask import (Flask,
+                   request,
+                   session,
+                   g,
+                   redirect,
+                   url_for,
+                   abort,
+                   render_template,
+                   flash)
 
 
 # 各種設定
@@ -39,7 +47,7 @@ def teardown_request(exception):
     db = getattr(g, 'db', None)
     if db is not None:
         db.close()
-    
+
 
 # コントローラ（djangoでいうview）
 # DBに保存されているエントリーの一覧ページ
@@ -56,8 +64,7 @@ def add_entry():
     if not session.get('logged_in'):
         abort(401)
     g.db.execute('INSERT INTO entries (title, text) VALUES (?, ?)',
-        [request.form['title'], request.form['text']]
-    )
+                 [request.form['title'], request.form['text']])
     g.db.commit()
     flash('新しいエントリーが追加されました。')
     return redirect(url_for('show_entries'))
